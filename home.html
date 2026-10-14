@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Throttle_key</title>
+    <link rel="icon" type="image/x-icon" href="Icon.ico">
+</head>
+<style>
+    body {
+        background-color: black;
+        height: 100vh;
+        overflow-y: hidden;
+    }
+
+    .wrapper span {
+        position: fixed;
+        bottom: -180px;
+        height: 50px;
+        z-index: -1;
+        background-color: #18191f;
+        box-shadow: 0 0 50px #0072ff,
+            0 0 100px #0072ff,
+            0 0 150px #0072ff,
+            0 0 200px #0072ff;
+        animation: animate 2s linear infinite;
+    }
+
+    .wrapper span:nth-child(1) {
+        left: 60px;
+        animation-delay: 0.6s;
+    }
+
+    .wrapper span:nth-child(2) {
+        left: 10%;
+        animation-delay: 2s;
+        width: 60px;
+        height: 60px;
+    }
+
+    .wrapper span:nth-child(3) {
+        left: 20%;
+        animation-delay: 1s;
+    }
+
+    .wrapper span:nth-child(4) {
+        left: 30%;
+        animation-delay: 4s;
+        width: 80px;
+        height: 80px;
+    }
+
+    .wrapper span:nth-child(5) {
+        left: 40%;
+        animation-delay: 0.5s;
+    }
+
+    .wrapper span:nth-child(6) {
+        left: 50%;
+        animation-delay: 6s;
+    }
+
+    .wrapper span:nth-child(7) {
+        left: 60%;
+        animation-delay: 5s;
+        width: 100px;
+        height: 100px;
+    }
+
+    .wrapper span:nth-child(8) {
+        left: 70%;
+        animation-delay: 7s;
+    }
+
+    .wrapper span:nth-child(9) {
+        left: 80%;
+        animation-delay: 5s;
+        width: 90px;
+        height: 90px;
+    }
+
+    .wrapper span:nth-child(10) {
+        left: 90%;
+        animation-delay: 3s;
+    }
+
+    .banneer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .content h2 {
+        font-family: fredoka;
+        color: white;
+        text-align: center;
+        top: 200px;
+        left: 40%;
+        position: absolute;
+        font-size: 50px;
+        z-index: 1;
+        cursor: default;
+    }
+
+    @font-face {
+        font-family: fredoka;
+        src: url(Fredoka/Fredoka-VariableFont_wdth\,wght.ttf);
+    }
+
+    @keyframes animate {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        80% {
+            opacity: 0.7s;
+        }
+
+        100% {
+            transform: translateY(-800px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .align {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        top: 380px;
+        position: absolute;
+        left: 43%;
+    }
+
+    .box {
+        transition: 0.9s;
+        flex: 50%;
+        border-radius: 25px;
+        background-color: transparent;
+        border: 3px solid rgba(255, 255, 255, 0.819);
+        text-align: center;
+        padding: 10px 24px;
+        font-family: fredoka;
+        color: rgb(255, 255, 255);
+        font-size: 22px;
+        cursor: pointer;
+        width: 220px;
+    }
+
+    .box:hover {
+        transition: 0.9s;
+        transform: scale(1.2);
+        border: 3px solid rgb(0, 34, 184);
+        color: rgb(0, 34, 184);
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .vol {
+        background-color: transparent;
+        border: none;
+    }
+
+    .vol:hover {
+        filter: saturate(8000%);
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="banner">
+        <div class="content">
+            <h2>FORMULA 1<br>THROTTLE KEY</h2>
+            <div class="align">
+                <div class="box" onclick="button('level.html')">START GAME</div>
+                <div class="box" onclick="button('')">BACK</div>
+            </div>
+        </div>
+        <audio id="music" loop>
+            <source src="home_sound.mp3" type="audio/mp3">
+        </audio>
+        <button id="muteBtn" class="vol" onclick="musicToggle()">
+            <img src="volume off.svg" id="muteIcon">
+        </button>
+        <script>
+            const music = document.getElementById('music');
+            const muteBtn = document.getElementById('muteBtn');
+            const muteIcon = document.getElementById('muteIcon');
+            const clickSound = new Audio('click.MP3');
+
+            document.addEventListener("click", () => {
+                if (music.paused) {
+                    music.play().catch(err => console.log("Autoplay blocked:", err));
+                }
+            }, { once: true });
+
+            function musicToggle() {
+                music.muted = !music.muted;
+                muteIcon.src = music.muted ? "volume off.svg" : "volume on.svg";
+            };
+
+            function button(destination) {
+                clickSound.currentTime = 0;
+                clickSound.play();
+
+                setTimeout(() => {
+                    window.location.href = destination;
+                }, 200);
+            }
+        </script>
+</body>
+
+</html>

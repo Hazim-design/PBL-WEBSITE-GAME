@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="f1niggames.png">
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+  <title>Car Dodge game</title>
+  <style>
+    canvas {
+      display: none;
+      margin: 0 auto;
+      background: transparent;
+      top: 0;
+      justify-content: center;
+      z-index: 2;
+      position: absolute;
+    }
+
+    #treeCanvas {
+      z-index: 1;
+      width: 800px;
+      height: 738px;
+      left: -200px;
+    }
+
+    #mapCanvas {
+      z-index: 3;
+      width: 100px;
+      height: 500px;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      position: absolute;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: rgb(50, 206, 50);
+      flex-direction: column;
+    }
+
+    .track-container {
+      width: 400px;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    .track-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 101%;
+    }
+
+    #countdown {
+      font-size: 120px;
+      font-family: 'Righteous', sans-serif;
+      font-weight: 900;
+      color: white;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      right: 0;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+      padding-top: 220px;
+      background-color: rgba(0, 0, 0, 0.289);
+    }
+
+    .game-over-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .game-over-text {
+      font-size: 80px;
+        font-family: 'Righteous', sans-serif;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 50px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .button {
+      background: linear-gradient(to top, #161616, #202020);
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 24px;
+        font-family: 'Righteous', sans-serif;
+      font-weight: 900;
+      border-radius: 10px;
+      margin: 0 20px;
+      transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+      display: flex;
+      align-items: center;
+    }
+
+    .button-icon {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+      background: linear-gradient(to top, #202020, #282828);    }
+
+    .font-face {
+        font-family: 'Righteous', sans-serif;
+    }
+
+    /* Confetti animation */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #ff0;
+      animation: confetti-fall 2s linear infinite;
+      z-index: 5; /* Ensure confetti appears in front of everything */
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="countdown"></div>
+  <div class="track-container">
+    <img class="track-image" src="track.png" alt="Track Image">
+    <img class="track-image" src="track.png" alt="Track Image">
+  </div>
+  <canvas id="gameCanvas" width="400" height="738px"></canvas>
+  <canvas id="treeCanvas" width="800" height="738px"></canvas>
+  <canvas id="mapCanvas" width="100" height="500"></canvas>
+  <div class="game-over-container" id="gameOverContainer">
+    <div class="game-over-text" id="gameOverText">YOU LOSE!</div>
+    <div class="button-container">
+      <a href="#" class="button" id="homeButton">
+        <img src="home.png" alt="Home" class="button-icon">
+        Home
+      </a>
+      <a href="#" class="button" id="restartButton">
+        <img src="restart.png" alt="Restart" class="button-icon">
+        Restart
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Get the necessary DOM elements
+    const countdownElement = document.getElementById("countdown");
+    const gameCanvas = document.getElementById("gameCanvas");
+    const mapCanvas = document.getElementById("mapCanvas");
+    const gameCtx = gameCanvas.getContext("2d");
+    const mapCtx = mapCanvas.getContext("2d");
+    const level = localStorage.getItem('selectedvalue');
+    const gameOverContainer = document.getElementById("gameOverContainer");
+    const gameOverText = document.getElementById("gameOverText");
+    const homeButton = document.getElementById("homeButton");
+    const restartButton = document.getElementById("restartButton");
+
+    // Car and obstacle properties
+    const car = { x: 175, y: 500, width: 40, height: 100 };
+    let carImage = new Image();
+    carImage.src = 'player2.png';
+
+    let obstacles = [];
+    let speedMultiplier = 0;
+
+    let leftPressed = false;
+    let rightPressed = false;
+    let gameStarted = false;
+    let gameTimer = 50; // 50 seconds
+    const winningPosition = 0;
+
+    // Event listeners for key input
+    document.addEventListener("keydown", (e) => {
+      if (gameStarted) {
+        if (e.key === "ArrowLeft" || e.key === "a") leftPressed = true;
+        if (e.key === "ArrowRight" || e.key === "d") rightPressed = true;
+      }
+    });
+
+    document.addEventListener("keyup", (e) => {
+      if (gameStarted) {
+        if (e.key === "ArrowLeft" || e.key === "a") leftPressed = false;
+        if (e.key === "ArrowRight" || e.key === "d") rightPressed = false;
+      }
+    });
+
+    // Set the speed multiplier based on the selected level
+    function setSpeedMultiplier() {
+      if (level === '1') speedMultiplier = 1;
+      else if (level === '2') speedMultiplier = 1.5;
+      else if (level === '3') speedMultiplier = 2;
+    }
+
+    // Update the game state
+    function update() {
+      if (!gameStarted) return;
+
+      // Adjust the car's speed
+      if (leftPressed && car.x > 0) car.x -= speedMultiplier * 5;
+      if (rightPressed && car.x + car.width < gameCanvas.width) car.x += speedMultiplier * 5;
+
+      // Handle obstacle collisions
+      for (let i = 0; i < obstacles.length; i++) {
+        obstacles[i].y += speedMultiplier * 5;
+
+        if (
+          car.x < obstacles[i].x + obstacles[i].width &&
+          car.x + car.width > obstacles[i].x &&
+          car.y < obstacles[i].y + obstacles[i].height &&
+          car.height + car.y > obstacles[i].y
+        ) {
+          gameStarted = false;
+          gameOverText.innerText = "YOU LOSE!";
+          gameOverContainer.style.opacity = 1;
+          gameCtx.filter = "brightness(50%)";
+          mapCtx.filter = "brightness(50%)";
+          return;
+        }
+      }
+
+      obstacles = obstacles.filter((obstacle) => obstacle.y < gameCanvas.height + 20);
+
+      // Spawn new obstacles
+      if (Math.random() < 0.019) {
+        const width = Math.random() * 50 + 50;
+        const x = Math.random() * (gameCanvas.width - width);
+        obstacles.push({ x, y: -20, width, height: 20, color: "red" });
+      }
+
+      // Decrease the game timer
+      gameTimer -= 1 / 60; // Decrease the timer by 1 second per frame
+      if (gameTimer <= 0) {
+        gameStarted = false;
+        gameOverText.innerText = "YOU WIN!";
+        gameOverContainer.style.opacity = 1;
+        gameCtx.filter = "brightness(50%)";
+        mapCtx.filter = "brightness(50%)";
+        createConfetti(); // Trigger confetti animation
+        setTimeout(() => {
+          window.location.href = "Dodge_game.html"; // Redirect after 5 seconds
+        }, 5000);
+      }
+    }
+
+    // Draw the game elements
+    function draw() {
+      if (!gameStarted) {
+        gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+        mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+        return;
+      }
+
+      gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+      mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+
+      gameCtx.drawImage(carImage, car.x, car.y, car.width, car.height);
+
+      obstacles.forEach((obstacle) => {
+        gameCtx.fillStyle = obstacle.color;
+        gameCtx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+      });
+
+      // Draw the map
+      mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+      mapCtx.fillStyle = "rgba(255, 255, 255, 0.5)"; // Transparent white background
+      mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
+
+      // Draw the track line
+      mapCtx.fillStyle = "gray";
+      mapCtx.fillRect(0, (gameTimer / 50 * mapCanvas.height), mapCanvas.width, mapCanvas.height);
+
+      // Draw the finish line
+      mapCtx.fillStyle = "white";
+      mapCtx.fillRect(0, 0, mapCanvas.width, 10);
+
+      // Draw the car navigation dot
+      mapCtx.fillStyle = "red";
+      mapCtx.fillRect(0, (gameTimer / 50 * mapCanvas.height), mapCanvas.width, 10);
+    }
+
+    // Game loop
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    // Track animation (updated for top-to-bottom movement)
+    const trackContainer = document.querySelector('.track-container');
+    const trackImages = document.querySelectorAll('.track-image');
+    let trackMoving = 0;
+    let trackSpeed = 2;
+    let trackPosition = 0;
+    let lastFrameTime = performance.now(); // Initialize lastFrameTime
+
+    function setTrackMoving(move) {
+      trackMoving = move;
+      if (trackMoving === 1) {
+        requestAnimationFrame(animateTrack);
+      }
+    }
+
+    function setTrackSpeed(speed) {
+      trackSpeed = parseInt(speed);
+    }
+
+    function animateTrack(currentTime) {
+      if (trackMoving === 0) return;
+
+      const deltaTime = currentTime - lastFrameTime;
+      lastFrameTime = currentTime;
+
+      let speedFactor = 0;
+      if (trackSpeed === 1) {
+        speedFactor = 0.4;
+      } else if (trackSpeed === 2) {
+        speedFactor = 0.5;
+      } else if (trackSpeed === 3) {
+        speedFactor = 0.7;
+      }
+
+      // Reverse the direction of movement
+      trackPosition += speedFactor * deltaTime;
+
+      // Apply the transformation
+      trackImages[0].style.transform = `translateY(${trackPosition}px)`;
+      trackImages[1].style.transform = `translateY(${trackPosition - trackContainer.clientHeight}px)`;
+
+      // Reset the position when the track moves out of view
+      if (trackPosition >= trackContainer.clientHeight) {
+        trackPosition = 0;
+      }
+
+      requestAnimationFrame(animateTrack); // Continuously call animateTrack
+    }
+
+    // Initialize track animation
+    trackImages[1].style.transform = `translateY(${-trackContainer.clientHeight}px)`;
+
+    // Start the track animation when the game starts
+    setTrackMoving(1);
+    setTrackSpeed(level || 2); // Set track speed based on the level or default to 2
+
+    // Countdown and game start
+    let countdownTime = 3;
+
+    function startCountdown() {
+      countdownElement.innerText = countdownTime;
+      const countdownInterval = setInterval(() => {
+        countdownTime--;
+        if (countdownTime > 0) {
+          countdownElement.innerText = countdownTime;
+        } else if (countdownTime === 0) {
+          countdownElement.innerText = "GO!";
+        } else {
+          clearInterval(countdownInterval);
+          countdownElement.style.display = "none";
+          gameCanvas.style.display = "block";
+          mapCanvas.style.display = "block";
+          setSpeedMultiplier();
+          gameStarted = true;
+          gameLoop();
+        }
+      }, 1000);
+    }
+
+    startCountdown();
+
+    // Button event listeners
+    homeButton.addEventListener("click", () => {
+      window.location.href = 'Dodge_game.html';
+    });
+
+    restartButton.addEventListener("click", () => {
+      location.reload();
+    });
+
+    // Confetti animation
+    function createConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = `${Math.random() * 2 + 1}s`;
+        document.body.appendChild(confetti);
+      }
+    }
+  </script>
+</body>
+</html>

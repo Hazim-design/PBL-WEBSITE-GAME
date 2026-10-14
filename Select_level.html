@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dodge game</title>
+        <link rel="icon" type="image/x-icon" href="f1niggames.png">
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    </head>
+    <style>
+       body {
+        overflow-y: hidden;
+        overflow-x: hidden;
+       }
+
+       .title {
+        font-family: 'Righteous', sans-serif;
+        color: rgba(255, 255, 255, 0.874);
+            text-align: center;
+            top: 200px;
+            left: 40%;
+            position: absolute;
+            font-size: 50px;
+            z-index: 1;
+            cursor: default;
+            user-select: none;
+        }
+
+        .font-face {
+            font-family: 'Righteous', sans-serif;
+        }
+
+        .container {
+            border-radius: 25px;
+            background-color: transparent;
+            z-index: 1;
+            border: 6px solid white;
+            position: absolute;
+            justify-items: center;
+            top: 50%;
+            padding: 6px 20px;
+            left: 23%;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: row;
+            gap: 2px;
+        }
+
+        .box {
+            transition: 0.5s;
+            background-color: transparent;
+            font-family: 'Righteous', sans-serif;
+            color: white;
+            font-size: 20px;
+            flex: 33.33%;
+            border-radius: 18px;
+            padding: 70px 120px;
+            margin: 20px 2px;
+            position: relative;
+            text-align: center;
+            border: 4px solid white;
+            cursor: pointer;
+        }
+
+        .box:hover {
+            transition: 0.5s;
+            background-color: white;
+            color: black;
+            transform: scaleY(1.1);
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+    <body>
+        <audio id="clickSound" src="mouse_sound.mp3"></audio>
+       <img src="AMG.png" height="102%" width="102%" oncontextmenu="return false;" style="object-fit: cover; margin-top: -10px; margin-left: -10px; z-index: -1; user-select: none;">
+       <h2 class="title">SELECT MODE</h2>
+       <div class="container">
+        <div class="options">
+            <a href="loading.html" onclick="storevalue(1)"><div class="box sound-button">EASY</div></a>
+            <a href="loading.html" onclick="storevalue(2)"><div class="box sound-button">MEDIUM</div></a>
+            <a href="loading.html" onclick="storevalue(3)"><div class="box sound-button">HARD</div></a>
+                </div>
+       </div>
+    </body>
+    <script>
+        function storevalue(number) {
+            localStorage.setItem('selectedvalue', number);
+            localStorage.setItem('trackspd', number);
+        }
+
+        const sound = document.getElementById("clickSound");
+        
+        document.querySelectorAll('.sound-button').forEach(button => {
+    // Plays when hovered
+    button.addEventListener('mouseenter', () => {
+        sound.currentTime = 0;
+        sound.play();
+    });
+
+    // Play when clciked
+    button.addEventListener('click', () => {
+        sound.currentTime = 0;
+        sound.play();
+    });
+});
+
+    </script>
+</html>

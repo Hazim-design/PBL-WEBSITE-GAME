@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Throttle_key</title>
+    <link rel="icon" type="image/x-icon" href="Icon.ico">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(to bottom, #121212, #1a1a1a);
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            height: 100vh;
+            overflow-x: hidden;
+            margin-bottom: 200px;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 48px;
+            color: #f5c518;
+            text-shadow: 0 0 10px #f5c518;
+            font-family: fredoka;
+        }
+
+        @font-face {
+            font-family: fredoka;
+            src: url(Fredoka/Fredoka-VariableFont_wdth\,wght.ttf);
+        }
+
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px auto;
+            max-width: 1000px;
+        }
+
+        .car-option {
+            background-color: #222;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+            cursor: pointer;
+            border: 4px solid transparent;
+            box-shadow: 0 0 10px #000;
+        }
+
+        .car-option img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: contain;
+        }
+
+        .car-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #f5c518;
+        }
+
+        .car-option.selected {
+            border-color: #f5c518;
+            box-shadow: 0 0 30px #f5c518;
+        }
+
+        .continue-button {
+            margin: 40px;
+            padding: 15px 40px;
+            font-size: 22px;
+            font-weight: bold;
+            color: black;
+            background-color: #f5c518;
+            border: none;
+            border-radius: 10px;
+            cursor: not-allowed;
+            transition: 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .continue-button.enabled {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .continue-button:hover.enabled {
+            transform: scale(1.05);
+            background-color: #ffd700;
+        }
+
+        p {
+            text-align: center;
+            font-size: 38px;
+            font-weight: 700;
+            font-family: fredoka;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Select Your F1 Car</h1>
+    <div class="car-grid">
+        <div class="car-option" data-car="car1" id="hover">
+            <img src="car1.png" alt="Car 1">
+            <p>Ferriri</p>
+        </div>
+        <div class="car-option" data-car="car2" id="hover">
+            <img src="car2.png" alt="Car 2">
+            <p>Mercedec</p>
+        </div>
+        <div class="car-option" data-car="car3" id="hover2">
+            <img src="car3.png" alt="Car 3">
+            <p>Mcralen</p>
+        </div>
+        <div class="car-option" data-car="car4" id="hover2">
+            <img src="car4.png" alt="Car 4">
+            <p>Dolpine</p>
+        </div>
+        <div class="car-option" data-car="car5" id="hover3">
+            <img src="car5.png" alt="Car 5">
+            <p>Williomp Racing</p>
+        </div>
+        <div class="car-option" data-car="car6" id="hover3">
+            <img src="car6.png" alt="Car 6">
+            <p>Black Bull</p>
+        </div>
+    </div>
+    <button class="continue-button" id="continueBtn">Continue</button>
+    <script>
+        const clickSound = new Audio('click.MP3');
+        const hov = new Audio('select.MP3');
+        const hover = document.getElementById('hover');
+        const hover2 = document.getElementById('hover2');
+        const hover3 = document.getElementById('hover3');
+        const carOptions = document.querySelectorAll('.car-option');
+        const continueBtn = document.getElementById('continueBtn');
+        let selectedCar = null;
+
+        const savedCar = localStorage.getItem('selectedCar');
+        if (savedCar) {
+            const preselect = document.querySelector(`.car-option[data-car="${savedCar}"]`);
+            if (preselect) {
+                preselect.classList.add('selected');
+                selectedCar = savedCar;
+                continueBtn.classList.add('enabled');
+                continueBtn.disabled = false;
+                continueBtn.style.cursor = 'pointer';
+            }
+        }
+
+        carOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                carOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedCar = option.getAttribute('data-car');
+
+                localStorage.setItem('selectedCar', selectedCar);
+
+                continueBtn.classList.add('enabled');
+                continueBtn.disabled = false;
+                continueBtn.style.cursor = 'pointer';
+            });
+        });
+
+        continueBtn.addEventListener('click', () => {
+            if (!selectedCar) return;
+
+            clickSound.currentTime = 0;
+            clickSound.play();
+            setTimeout(() => {
+                window.location.href = 'loading.html';
+            }, 200);
+        });
+
+        hover.addEventListener('mouseover', function () {
+            hov.currentTime = 0;
+            hov.play().catch(error => {
+                console.error("Playback failed:", error);
+            });
+        });
+
+        hover2.addEventListener('mouseover', function () {
+            hov.currentTime = 0;
+            hov.play().catch(error => {
+                console.error("Playback failed:", error);
+            });
+        });
+
+        hover3.addEventListener('mouseover', function () {
+            hov.currentTime = 0;
+            hov.play().catch(error => {
+                console.error("Playback failed:", error);
+            });
+        });
+    </script>
+</body>
+
+</html>

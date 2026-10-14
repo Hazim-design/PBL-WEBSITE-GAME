@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="f1niggames.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reaction Time Test</title>
+    
+    <!-- Styleshits -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <audio id="clickSound" src="mouse_sound.mp3"></audio>
+    <div class="Bgimage">
+        <div class="Gametitle">
+            <h1 class="righteousfont">Reaction&nbsp;Time Test</h1>
+            <a href="reactiontutorial.html" class="Playbutton sound-button">Play</a><br>
+            <a href="Index.html" class="Backbutton sound-button">Back</a>
+        </div>
+    </div>
+</body>
+<script>
+           const sound = document.getElementById("clickSound");
+        
+        document.querySelectorAll('.sound-button').forEach(button => {
+    // Plays when hovered
+    button.addEventListener('mouseenter', () => {
+        sound.currentTime = 0;
+        sound.play();
+    });
+
+    // Play when clciked
+    button.addEventListener('click', () => {
+        sound.currentTime = 0;
+        sound.play();
+    });
+});
+
+</script>
+</html>

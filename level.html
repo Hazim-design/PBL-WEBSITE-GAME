@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Throttle Key</title>
+    <link rel="icon" type="image/x-icon" href="Icon.ico">
+</head>
+<style>
+    body {
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    .title {
+        font-family: fredoka;
+        color: rgba(255, 255, 255, 0.874);
+        text-align: center;
+        top: 60px;
+        left: 40%;
+        position: absolute;
+        font-size: 50px;
+        z-index: 1;
+        cursor: default;
+        user-select: none;
+    }
+
+    @font-face {
+        font-family: fredoka;
+        src: url(Fredoka/Fredoka-VariableFont_wdth\,wght.ttf);
+    }
+
+    .container {
+        border-radius: 25px;
+        background-color: transparent;
+        z-index: 1;
+        border: 6px solid white;
+        position: absolute;
+        justify-items: center;
+        top: 30%;
+        padding: 6px 20px;
+        left: 24%;
+        right: 24%;
+    }
+
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .box {
+        transition: 0.5s;
+        background-color: transparent;
+        font-family: fredoka;
+        color: white;
+        font-size: 20px;
+        flex: 33.33%;
+        border-radius: 18px;
+        padding: 20px 120px;
+        margin: 10px 200px;
+        position: relative;
+        text-align: center;
+        border: 4px solid white;
+        cursor: pointer;
+    }
+
+    .box:hover {
+        transition: 0.9s;
+        background-color: white;
+        color: black;
+        margin: 10px 20px;
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
+
+<body>
+    <img src="wallpaper.jpg" height="102%" width="102%" oncontextmenu="return false;"
+        style=" filter: brightness(50%); object-fit: cover; margin-top: -10px; margin-left: -10px; z-index: -1; user-select: none;">
+    <h2 class="title">SELECT MODE</h2>
+    <div class="container">
+        <div class="options">
+            <a onclick="storevalue(1)">
+                <div class="box" onclick="playSound()">EASY</div>
+            </a>
+            <a onclick="storevalue(2)">
+                <div class="box" onclick="playSound()">MEDIUM</div>
+            </a>
+            <a onclick="storevalue(3)">
+                <div class="box" onclick="playSound()">HARD</div>
+            </a>
+        </div>
+    </div>
+
+</body>
+<script>
+    const clickSound = new Audio('click.MP3');
+    function storevalue(number) {
+        localStorage.setItem('level', number);
+    }
+
+    function playSound() {
+        clickSound.currentTime = 0;
+        clickSound.play();
+        setTimeout(() => {
+            window.location.href = 'select.html';
+        }, 200);
+    }
+</script>
+
+</html>

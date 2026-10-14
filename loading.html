@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dodge game</title>
+        <link rel="icon" type="image/x-icon" href="f1niggames.png">
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    </head>
+    <style>
+
+        .font-face {
+            font-family: 'Righteous', sans-serif;
+        }
+
+        body {
+            font-family: 'Righteous', sans-serif;
+            background-color: black;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .percent {
+            color: white;
+            font-size: 80px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar{
+            width: 406px;
+            height: 21px;
+            background: black;
+            border-radius: 13px;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+
+        .progress {
+            width: 200px;
+            height: 15px;
+            background: rgb(190, 39, 39);
+            border-radius: 13px;
+        }
+
+        .blink {
+            animation: text_blink .7s ease-in-out .1s;
+        }
+
+        @keyframes text_blink {
+            0%{
+                opacity: 1;
+            }
+            50%{
+                opacity: 0.5;
+            }
+            100%{
+                opacity: 1;
+            }
+        }
+
+        .text {
+            position: absolute;
+            left: 160px;
+            color: rgb(255, 255, 255);
+            font-size: 15px;
+            letter-spacing: 1px;
+            font-family: 'Righteous', sans-serif;
+            line-height: 21px;
+            display: none;
+        }
+    </style>
+    <body>
+        <div class="loading">
+            <div class="percent">100%</div>
+            <div class="text">Complete!</div>
+            <div class="progress-bar">
+             <div class="progress"></div>   
+            </div>
+        </div>
+    </body>
+    <script>
+        let percent = document.querySelector('.percent');
+        let progress = document.querySelector('.progress');
+        let text = document.querySelector('.text');
+        let count = 4;
+        let per = 16;
+        let loading = setInterval(animate, 10);
+
+        function change(link, delay) {
+                setTimeout(function() {
+                        window.location.href = link;
+                    },delay);
+            }
+
+            function animate() {
+                if(count == 100 && per == 400){
+                    percent.classList.add(".blink");
+                    text.style.display = "block";
+                    clearInterval(loading);
+                    change("game.html", 2000);
+                }
+                else {
+                    per = per + 4;
+                    count = count + 1;
+                    progress.style.width = per + 'px';
+                    percent.textContent = count + '%';
+                }
+            }
+    </script>
+</html>

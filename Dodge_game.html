@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Dodge game</title>
+        <link rel="icon" type="image/x-icon" href="f1niggames.png">
+        <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    </head>
+    <style>
+        *
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background-image: linear-gradient(to right, rgb(73, 73, 73), rgb(231, 230, 230));
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .bubbles {
+            position: relative;
+            display: flex;
+        }
+
+        .bubbles span {
+            position: relative;
+            width: 30px;
+            height: 30px;
+            background: rgb(61, 61, 61);
+            margin: 0 4px;
+            border-radius: 50%;
+            box-shadow: 0 0 0 10px #4e4e4e44, 0 0 50px rgb(61, 61, 61), 0 0 100px rgb(61, 61, 61);
+            animation: animate 15s linear infinite;
+            animation-duration: calc(300s / var(--i));
+        }
+        .bubbles span:nth-child(even)
+        {
+            background: white;
+            box-shadow: 0 0 0 10px #c5c5c544, 0 0 50px white, 0 0 100px white;
+        }
+        @keyframes animate {
+            0%
+            {
+                transform: translateY(100vh) scale(0.3);
+                opacity: 0;
+            }
+            100%
+            {
+                transform: translateY(-10vh) scale(0.4);
+                opacity: 1;
+            }
+        }
+
+        .title {
+            font-family: 'Righteous', sans-serif;
+            color: rgba(35, 35, 35, 0.752);
+            text-align: center;
+            top: 275px;
+            left: 35%;
+            position: absolute;
+            font-size: 100px;
+            z-index: 1;
+            cursor: default;
+
+        }
+
+        .font-face {
+            font-family: 'Righteous', sans-serif;
+        }
+
+        .align {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            top: 550px;
+            position: absolute;
+            left: 32.75%;
+        }
+
+        .box {
+            transition: 0.9s;
+            flex: 50%;
+            border-radius: 25px;
+            background-color: transparent;
+            border: 6px solid rgba(59, 59, 59, 0.819);
+            text-align: center;
+            padding: 10px 24px;
+            font-family: 'Righteous', sans-serif;
+            color: rgb(59, 59, 59);
+            font-size: 55px;
+            cursor: pointer;
+            width: 720px;
+            height: 100px;
+        }
+
+        .box:hover {
+            transition: 0.9s;
+            transform: scale(1.1);
+            border: 6px solid rgb(0, 0, 0);
+            color: rgb(0, 0, 0);
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+    <body>
+        <audio id="clickSound" src="mouse_sound.mp3"></audio>
+        <div class="container">
+            <h2 class="title">FORMULA 1<br>DODGE GAME</h2>
+            <div class="align">
+                <a href="Select_level.html"><div class="box sound-button">START GAME</div></a>
+                <a href="Index.html"><div class="box sound-button">BACK</div></a>
+                            </div>
+            <div class="bubbles">
+                <span style="--i:11;"></span>
+                <span style="--i:12;"></span>
+                <span style="--i:24;"></span>
+                <span style="--i:10;"></span>
+                <span style="--i:14;"></span>
+                <span style="--i:23;"></span>
+                <span style="--i:18;"></span>
+                <span style="--i:16;"></span>
+                <span style="--i:19;"></span>
+                <span style="--i:20;"></span>
+                <span style="--i:22;"></span>
+                <span style="--i:25;"></span>
+                <span style="--i:18;"></span>
+                <span style="--i:21;"></span>
+                <span style="--i:15;"></span>
+                <span style="--i:13;"></span>
+                <span style="--i:26;"></span>
+                <span style="--i:17;"></span>
+                <span style="--i:13;"></span>
+                <span style="--i:28;"></span>
+                <span style="--i:1;"></span>
+                <span style="--i:12;"></span>
+                <span style="--i:25;"></span>
+                <span style="--i:17;"></span>
+                <span style="--i:32;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:19;"></span>
+                <span style="--i:12;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:20;"></span>
+                <span style="--i:43;"></span>
+                <span style="--i:25;"></span>
+                <span style="--i:18;"></span>
+                <span style="--i:21;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:13;"></span>
+                <span style="--i:26;"></span>
+                <span style="--i:17;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:28;"></span>
+                
+            </div>
+        </div>
+    </body>
+    <script>
+    const sound = document.getElementById("clickSound");
+
+document.querySelectorAll('.sound-button').forEach(button => {
+    // Play sound on hover
+    button.addEventListener('mouseenter', () => {
+        sound.currentTime = 0;
+        sound.play();
+    });
+
+    // Play sound on click
+    button.addEventListener('click', () => {
+        sound.currentTime = 0;
+        sound.play();
+    });
+});
+</script>
+</html>
